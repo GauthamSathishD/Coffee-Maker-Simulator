@@ -1,0 +1,188 @@
+//Coffee Klatch Assignment
+
+package coffeeklatch;
+import java.util.Scanner;
+
+public class CoffeeKlatch {
+
+    public static void main(String[] args) {
+
+        Scanner keyboard = new Scanner(System.in);
+        String choice = "start";//set choice to "start" so that while loop starts
+        do {//do
+            //System.out.println("What is your name?");//ask for user's name
+            //String user = keyboard.next();//store the user's name
+
+            System.out.println("What size would you like (s)mall, (m)edium, (l)arge: ");//ask for size that user wants
+            String cupSize = keyboard.next();//store the user's cup size
+            String displaySize = "";//use this variable to display the corresponding word for the letter that the user types
+            while (!cupSize.equals("s") && !cupSize.equals("m") && !cupSize.equals("l")) {
+                System.out.println("Enter a valid size. (s)mall, (m)edium, (l)arge: ");//Prompt user for valid entry
+                cupSize = keyboard.next();//store the user's cup size
+            }
+            if ("s".equals(cupSize)) {
+                displaySize = "SMALL";
+
+            } else if ("m".equals(cupSize)) {
+                displaySize = "MEDIUM";
+
+            } else if ("l".equals(cupSize)) {
+                displaySize = "LARGE";
+            }
+
+            int waterRequired = 0;//variable to store how much water is required for a certain cup size
+
+            if ("s".equals(cupSize)) {
+                waterRequired = 2;
+            } else if ("m".equals(cupSize)) {
+                waterRequired = 3;
+            } else if ("l".equals(cupSize)) {
+                waterRequired = 4;
+            }
+
+            System.out.println("How do you like your coffee? (w)eak, (r)egular, (s)trong, (k)iller intense: ");
+            String strength = keyboard.next();//store the user's strength
+
+            //String displayStrength = "";//use this variable to display the corresponding word for the letter that the user types
+            while (!strength.equals("w") && !strength.equals("r") && !strength.equals("s") && !strength.equals("k")) {
+                System.out.println("Enter a valid strength.(w)eak, (r)egular, (s)trong, (k)iller intense: ");//Prompt user for valid strength
+                strength = keyboard.next();//store the user's strength
+            }
+            CoffeeMachine coffeeMachine = new CoffeeMachine();//create coffee machine object
+            coffeeMachine.setStrength(strength);//send strength to coffee machine
+            /*
+            if ("w".equals(strength)) {
+                displayStrength = "Weak";
+            } else if ("r".equals(strength)) {
+                displayStrength = "Regular";
+            } else if ("s".equals(strength)) {
+                displayStrength = "Strong";
+            } else if ("k".equals(strength)) {
+                displayStrength = "Killer Intense";
+            }
+             */
+            CoffeeCup cc = new CoffeeCup(cupSize);//create coffee cup object
+
+            choice = "start";//set choice to "start" so that while loop starts
+
+            //LIST OF VARIABLES
+            boolean beansGround = coffeeMachine.beansGround();//variable to store status of beans (ground or not ground)
+            boolean cupFull = cc.fullOfCoffee();//variable to store status of cup (full or empty)
+            boolean brewed = coffeeMachine.brewed();//variable to store status of coffee (brewed or not brewed)
+            boolean beans = coffeeMachine.beansAdded();//variabe to store status of beans (added or not added)
+            boolean water = false;//variable to store status of water (false if level is 0, true if level is greater than 0)
+
+            int waterLevel = coffeeMachine.waterLevel();//variable to store the water level of the coffee machine
+
+            while (!"x".equals(choice) && !"n".equals(choice)) {//while the user does not exit and choose new customer
+
+                //PRINT USER INTERFACE
+                System.out.println("\t\tMACHINE\t\t\t\tUSER: " + cc.getName() + "\t\tCUP SIZE: " + displaySize);
+                System.out.println("Water\tLevel\tBeans\tBeansGround\tCoffeeBrewed\tCup Full\tStrength");
+                System.out.println(water + "\t" + waterLevel + "\t" + beans + "\t" + beansGround + "\t\t" + brewed + "\t\t" + cupFull + "\t\t" + coffeeMachine.strength());
+                System.out.println();
+                System.out.println("OPTIONS: ");//print out options for user to see
+                System.out.println("n - New Customer");
+                System.out.println("w - Add Water");
+                System.out.println("b - Add Coffee Beans");
+                System.out.println("g - Grind Beans");
+                System.out.println("r - Brew Coffee");
+                System.out.println("p - Pour a Cup");
+                System.out.println("d - Drink a Cup");
+                System.out.println("x - Exit");
+                System.out.print("\tYour Choice? ");
+                choice = keyboard.next();//let user enter choice
+
+                if (("w".equals(choice)) && (water == false)) {
+                    coffeeMachine.addWater();//let user add water
+                    waterLevel = coffeeMachine.waterLevel();//update status of water in coffee machine
+                    water = true;
+                } else if (("w".equals(choice)) && (water == true)) {
+                    System.out.println("You have already added water");
+                } //ADDING BEANS
+                else if (("b".equals(choice)) && (beans == false)) {//if the user chooses the "add coffee beans" option
+                    coffeeMachine.addBeans();//let user add beans
+                    beans = coffeeMachine.beansAdded();//update status of beans
+
+                } else if ("b".equals(choice) && (beans == true)) {//if the user chooses the "add coffee beans" option and beans have already been added 
+                    System.out.println("You have already added beans");
+                } //GRINDING BEANS
+                else if (("g".equals(choice)) && (beans == true) && (beansGround == false)) {//if use chooses "grind beans" and there are beans added
+                    coffeeMachine.grindBeans();//let user grind beans
+                    beansGround = true;//let beansGround be true
+
+                } else if (("g".equals(choice)) && (beans == false)) {//if beans have not been added
+                    System.out.println("You have not added beans yet");
+
+                } else if (("g".equals(choice)) && (beansGround == true)) {//if beans have already been ground
+                    System.out.println("You have already ground your beans");
+                } //BREWING COFFEE
+                else if (("r".equals(choice)) && (waterLevel >= waterRequired) && (beansGround == true) && (brewed == false)) {//if the user chooses the "brew" option
+                    //and if user has added water, beans are ground, and coffee is not already brewed
+                    coffeeMachine.brew(cc);//let user brew coffee
+                    brewed = coffeeMachine.brewed();
+
+                } else if (("r".equals(choice)) && (water == false) && (beansGround == true)) {//if there is no water but the beans are ground
+                    System.out.println("You have not added water yet");
+
+                } else if (("r".equals(choice)) && (water == true) && (beansGround == false)) {//if there is water but beans are not ground
+                    System.out.println("You have not ground the beans yet");
+
+                } else if (("r".equals(choice)) && (water == false) && (beansGround == false)) {//if there is no water and beans are not ground
+                    System.out.println("You have not added water or ground the beans yet");
+
+                } else if (("r".equals(choice)) && (brewed == true)) {//if coffee is already brewed
+                    System.out.println("You have already brewed your coffee");
+                }
+
+                //POURING COFFEE
+                else if ("p".equals(choice)) {//if the user chooses the "pour" option
+
+                    if ((brewed == true) && (cupFull == false) && (waterLevel >= cc.getWaterNeeded())) {//if coffee is brewed, the cup is not full, and the water level is greater than or equal to 2
+                        cc.pourCoffee();//let user pour coffee
+                        cupFull = cc.fullOfCoffee();//update cupFull
+                        coffeeMachine.subtractWater(cc);//subtract units from the water level
+                        waterLevel = coffeeMachine.waterLevel();//update the water level
+                        water = coffeeMachine.water();//update water status
+
+                        brewed = coffeeMachine.brewed();//update brewed status, if water is false, brewed, beans ground, and beans added are false too
+                        beans = coffeeMachine.beansAdded();//update beans status
+                        beansGround = coffeeMachine.beansGround();//update ground status
+
+                        System.out.println("Pouring coffee into coffee cup");//notify user that coffee is being poured into the cup
+
+                    } else if (cupFull == true) {//if the cup is full
+                        System.out.println("Your cup is already full");//notify the user that they cannot pour more coffee into the cup
+
+                    } else if (brewed == false) {//if the coffee is not brewed
+                        System.out.println("Your coffee is not brewed yet");//notify the user that they have not brewed the coffee yet
+
+                    } else if (waterLevel < cc.getWaterNeeded()) {//if the water level is less than 2
+                        System.out.println("You need to brew more coffee");//tell user to brew more coffee
+                        coffeeMachine.brewMore();//reset water, beans added, beans ground, and brewed to false
+                        waterLevel = 0;//set water level to 0
+                        water = false;//set water status to false
+                        brewed = coffeeMachine.brewed();//update brewed status, if water is false, brewed, beans ground, and beans added are false too
+                        beans = coffeeMachine.beansAdded();//update beans status
+                        beansGround = coffeeMachine.beansGround();//update ground status
+
+                    }
+
+                }
+
+            
+
+                else if ("d".equals(choice)) {//if user wants to drink coffee and the cup is full
+                cc.drink();//drink coffee               
+                cupFull = cc.fullOfCoffee();//update the status of the cup (whether it's full or not)
+            }else if(!"x".equals(choice)&&!"n".equals(choice)){
+                    System.out.println("Enter a valid option!");//Prompt user for valid option
+                }
+            }
+            //NEW PERSON 
+        } while ("n".equals(choice));//if the user chooses the "new customer" option
+    }
+}
+
+
+
