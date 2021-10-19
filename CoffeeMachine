@@ -1,0 +1,115 @@
+/* A fancy coffee maker.  Makes coffee of varying strengths. */
+
+package coffeeklatch;
+
+public class CoffeeMachine {
+
+    private String strength;//The current strength of the coffee
+
+    public void setStrength(String s) {
+        strength = s;
+        
+        if ("w".equals(strength)) {
+            strength = "Weak";
+
+        } else if ("r".equals(strength)) {
+            strength = "Regular";
+
+        } else if ("s".equals(strength)) {
+            strength = "Strong";
+
+        } else if ("k".equals(strength)) {
+            strength = "Killer Intense";
+        }
+
+    }
+
+    public String strength() {
+        return strength;
+    }
+
+    private boolean beansGround = false;//use to store status of beans (ground or not ground)
+
+    public void grindBeans() {
+        System.out.println("Grinding beans for " + strength + " coffee.");
+        beansGround = true;
+    }
+
+    public boolean beansGround() {
+        if (water == false) {
+            beansGround = false;
+        }
+        return beansGround;
+    }
+
+    private boolean beansAdded = false;//keep track of whether or not beans are added
+
+    public void addBeans() {
+        System.out.println("Adding Beans");
+        beansAdded = true;
+    }
+
+    public boolean beansAdded() {
+        return beansAdded;
+    }
+
+    private boolean brewed = false;//keep track of whether or not coffee is brewed
+
+    public void brew(CoffeeCup c) {
+
+        System.out.println("Brewing " + strength + " coffee for "+ c.getName());
+        brewed = true;
+    }
+
+    public boolean brewed() {
+        if (water == false) {
+            brewed = false;
+            beansAdded = false;
+            beansGround = false;
+        }
+        return brewed;
+    }
+
+    public void brewMore() {
+        beansAdded = false;
+        beansGround = false;
+        water = false;
+        brewed = false;
+    }
+
+    private int waterLevel = 0;//keeps track of waterLevel of coffee machine
+
+    public int waterLevel() {
+        return waterLevel;
+    }
+
+    private boolean water = false;//keeps track of whether or not there is enough water in the machine
+
+    public boolean water() {
+        if (waterLevel <= 0) {
+            water = false;
+        } else if (waterLevel > 0) {
+            water = true;
+        }
+
+        return water;
+    }
+
+    public void addWater() {
+
+        water = true;
+        if (waterLevel == 10) {
+            System.out.println("Tank is already full");
+
+        } else if (waterLevel < 10) {
+            System.out.println("Adding Water");
+            waterLevel = 10;
+        }
+
+    }
+
+    public void subtractWater(CoffeeCup c) {
+        waterLevel = waterLevel - c.getWaterNeeded();
+
+    }
+}
