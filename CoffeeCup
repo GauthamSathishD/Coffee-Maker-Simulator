@@ -1,0 +1,63 @@
+package coffeeklatch;
+import java.util.Scanner;
+
+
+public class CoffeeCup {
+    private static Scanner keyboard = new Scanner(System.in);
+    private String name;
+    private String size;
+    private int waterNeeded;
+
+    public CoffeeCup(String size){
+        System.out.println("What is your name?");//ask for user's name
+        name = keyboard.next();//store the user's name
+        this.size = size;
+        if ("s".equals(this.size)){
+           waterNeeded = 2;
+       }
+       if ("m".equals(this.size)){
+           waterNeeded = 3;
+       }
+       if ("l".equals(this.size)){
+           waterNeeded = 4;
+       }
+    }
+  
+    public int getWaterNeeded(){
+        return waterNeeded;
+    }
+   
+    public String getName(){
+        return name;    
+    }
+    
+    private boolean fullOfCoffee = false;//Store status of cup (full of coffee or empty)
+
+    public boolean fullOfCoffee() {
+        return fullOfCoffee;
+    }
+   
+    public void pourCoffee() {
+        fullOfCoffee = true;
+    }
+ 
+    public void emptyCup(){
+        fullOfCoffee = false;
+    }
+    
+  
+    public boolean drink() {
+        
+        if (fullOfCoffee==true) {
+            System.out.println(name + ", you glug the coffee down.");
+            fullOfCoffee = false;
+            return true;
+            
+        } else {
+            System.out.println(name + ", you sip furiously, but only suck air.");
+            return false;
+        }
+        
+    }
+
+}
